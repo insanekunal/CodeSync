@@ -1,0 +1,15 @@
+services:
+  piston:
+    image: ghcr.io/engineer-man/piston
+    privileged: true
+    ports:
+      - "2000:2000"
+    tmpfs:
+      - /tmp:exec,mode=777
+    volumes:
+      - piston_data:/piston
+    environment:
+      - PISTON_CORS_ENABLED=true
+      - PISTON_CORS_ORIGINS=http://localhost:5173
+volumes:
+  piston_data:

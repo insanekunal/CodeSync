@@ -1,0 +1,31 @@
+{
+  "name": "code-sync",
+  "version": "1.0.0",
+  "description": "![logo](https://github.com/insanekunal/Code-Sync/assets/100127570/d1ff7f52-a692-4d51-b281-358aeab9156e)",
+  "main": "test.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/insanekunal/Code-Sync.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/insanekunal/Code-Sync/issues"
+  },
+  "homepage": "https://github.com/insanekunal/Code-Sync#readme",
+  "dependencies": {
+    "node-fetch": "^2.7.0",
+    "tldraw": "^4.5.10"
+  },
+  "devDependencies": {
+    "vite": "^8.0.10"
+  }
+}

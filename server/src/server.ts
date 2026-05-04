@@ -6,6 +6,7 @@ import { SocketEvent, SocketId } from "./types/socket"
 import { USER_CONNECTION_STATUS, User } from "./types/user"
 import { Server } from "socket.io"
 import path from "path"
+import axios from "axios"
 
 dotenv.config()
 
@@ -63,7 +64,22 @@ app.get("/api/judge0/runtimes", async (req: Request, res: Response) => {
         res.status(500).json({ error: "Failed to fetch languages" })
     }
 })
+app.get("/api/judge0/languages", async (req: Request, res: Response) => {
+    try {
+        const response = await axios.get("https://emkc.org/api/v2/piston/runtimes");
 
+        const formattedLanguages = response.data.map((lang: any) => ({
+            id: lang.language,
+            name: lang.language,
+            version: lang.version
+        }));
+
+        res.json(formattedLanguages);
+    } catch (error) {
+        console.error("Failed to fetch languages:", error);
+        res.status(500).json({ error: "Failed to fetch supported languages" });
+    }
+});
 app.post("/api/judge0/execute", async (req: Request, res: Response) => {
     try {
         const { language, files, stdin } = req.body

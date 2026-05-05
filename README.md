@@ -99,3 +99,7 @@ Backend (Render)
 Socket Communication
       ↓
 Judge0 API + Groq API
+
+Contributors:
+Kunal Kumar
+Nandini

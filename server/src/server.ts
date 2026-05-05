@@ -66,46 +66,68 @@ app.get("/api/judge0/runtimes", async (req: Request, res: Response) => {
 })
 app.get("/api/judge0/languages", async (req: Request, res: Response) => {
     try {
-        const response = await axios.get("https://emkc.org/api/v2/piston/runtimes");
+        const response = await axios.get("https://ce.judge0.com/languages")
 
         const formattedLanguages = response.data.map((lang: any) => ({
-            id: lang.language,
-            name: lang.language,
-            version: lang.version
-        }));
+            id: lang.id,
+            name: lang.name
+        }))
 
-        res.json(formattedLanguages);
+        res.json(formattedLanguages)
     } catch (error) {
-        console.error("Failed to fetch languages:", error);
-        res.status(500).json({ error: "Failed to fetch supported languages" });
+        console.error("Judge0 language fetch error:", error)
+        res.status(500).json({
+            error: "Failed to fetch Judge0 languages"
+        })
     }
-});
+})
 app.post("/api/judge0/execute", async (req: Request, res: Response) => {
     try {
         const { language, files, stdin } = req.body
+
+        if (!files || files.length === 0) {
+            return res.status(400).json({
+                error: "No files provided"
+            })
+        }
+
         const source_code = files[0].content
-        const submitResponse = await fetch("https://ce.judge0.com/submissions?base64_encoded=false&wait=true", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
+
+        const response = await axios.post(
+            "https://ce.judge0.com/submissions?base64_encoded=false&wait=true",
+            {
                 source_code,
                 language_id: language,
                 stdin: stdin || ""
-            })
-        })
-        const result = await submitResponse.json()
+            },
+            {
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }
+        )
+
+        const result = response.data
+
         res.json({
             run: {
                 stdout: result.stdout || "",
-                stderr: result.stderr || result.compile_output || "",
+                stderr:
+                    result.stderr ||
+                    result.compile_output ||
+                    result.message ||
+                    "",
                 code: result.status?.id
             }
         })
-    } catch (error) {
-        res.status(500).json({ error: "Failed to execute code" })
+    } catch (error: any) {
+        console.error("Execution error:", error.response?.data || error.message)
+
+        res.status(500).json({
+            error: "Failed to execute code"
+        })
     }
 })
-
 const server = http.createServer(app)
 const io = new Server(server, {
 	cors: {

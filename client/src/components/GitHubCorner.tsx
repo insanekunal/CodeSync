@@ -7,7 +7,7 @@ function GitHubCorner() {
 
     return (
         <a
-            href="https://github.com/insanekunal/Code-Sync"
+            href="https://github.com/insanekunal/CodeSync"
             className="github-corner"
             aria-label="View source on GitHub"
             target="_blank"
